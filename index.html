@@ -5,93 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rose Doces e Salgados</title>
     <style>
-        body {
-            font-family: Arial;
-            background: linear-gradient(rgba(255,248,245,.9), rgba(255,248,245,.9)), url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmyUIdSlerxyk24F6lp7XOTitzLFu3PJorhzylzAMGgs&10) center/cover fixed;
-            margin: 0;
-        }
-        header {
-            background: linear-gradient(135deg, #ff8f8f, #ff6f61);
-            color: #fff;
-            text-align: center;
-            padding: 40px 20px;
-            box-shadow: 0 4px 20px rgba(255,143,143,.3);
-        }
-        /* Nova seção para imagem no topo */
-        .hero-image {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            display: block;
-            margin: 0;
-        }
-        .categorias {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 20px;
-        }
-        button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 25px;
-            background: #ff6f61;
-            color: #fff;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all .3s;
-        }
-        button:hover, button.active {
-            background: #e85a4f;
-            transform: scale(1.05);
-        }
-        .produtos {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            padding: 30px;
-            max-width: 1400px;
-            margin: auto;
-        }
-        .card {
-            background: rgba(255,255,255,.95);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,.15);
-            transition: transform .3s;
-        }
-        .card:hover {
-            transform: translateY(-10px);
-        }
-        .card img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-        }
-        .info {
-            padding: 20px;
-            text-align: center;
-        }
-        .preco {
-            color: #e85a4f;
-            font-size: 24px;
-            font-weight: bold;
-            margin: 15px 0;
-        }
-        .whatsapp-btn {
-            display: inline-block;
-            padding: 12px 25px;
-            background: #25D366;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 25px;
-            font-weight: bold;
-            transition: background .3s;
-        }
-        .whatsapp-btn:hover {
-            background: #128C7E;
-        }
+        body { font-family: Arial; background: linear-gradient(rgba(255,248,245,.9), rgba(255,248,245,.9)), url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmyUIdSlerxyk24F6lp7XOTitzLFu3PJorhzylzAMGgs&10) center/cover fixed; margin: 0; }
+        header { background: linear-gradient(135deg, #ff8f8f, #ff6f61); color: #fff; text-align: center; padding: 40px 20px; box-shadow: 0 4px 20px rgba(255,143,143,.3); }
+        .categorias { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 20px; }
+        button { padding: 12px 20px; border: none; border-radius: 25px; background: #ff6f61; color: #fff; cursor: pointer; font-weight: bold; transition: all .3s; }
+        button:hover, button.active { background: #e85a4f; transform: scale(1.05); }
+        .produtos { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding: 30px; max-width: 1400px; margin: auto; }
+        .card { background: rgba(255,255,255,.95); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,.15); transition: transform .3s; }
+        .card:hover { transform: translateY(-10px); }
+        .card img { width: 100%; height: 250px; object-fit: cover; }
+        .info { padding: 20px; text-align: center; }
+        .preco { color: #e85a4f; font-size: 24px; font-weight: bold; margin: 15px 0; }
+        .whatsapp-btn { display: inline-block; padding: 12px 25px; background: #25D366; color: #fff; text-decoration: none; border-radius: 25px; font-weight: bold; transition: background .3s; }
+        .whatsapp-btn:hover { background: #128C7E; }
+        /* Estilo mínimo só para a nova imagem no topo */
+        .topo-imagem { width: 100%; height: 300px; object-fit: cover; display: block; }
     </style>
 </head>
 <body>
@@ -99,13 +27,13 @@
         <h1>ROSE DOCES E SALGADOS</h1>
         <p>Doces e Salgados Caseiros Feitos com Amor em São José do Rio Preto</p>
     </header>
-
-    <!-- Imagem adicionada no topo, logo após o header -->
-    <img src="https://dl.dropbox.com/scl/fi/e9vcv99wayzjq59qugxyl/rosesalg.jpg?rlkey=sr5ddznsp0gwligwirycrfhpi&st=0kpw3g9m&dl=0" alt="Capa - Rose Doces e Salgados" class="hero-image">
-
+    
+    <!-- Imagem Dropbox adicionada no topo -->
+    <img src="SUA_URL_DO_DROPBOX_AQUI" alt="Capa Rose Doces e Salgados" class="topo-imagem">
+    
     <div id="categorias"></div>
     <div id="produtos"></div>
-
+    
     <script>
         const dados = {
             whatsapp: "5517999999999", // TROQUE PELO SEU NÚMERO
