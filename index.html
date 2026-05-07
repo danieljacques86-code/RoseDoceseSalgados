@@ -9,11 +9,14 @@
     header { background:#ff8f8f; color:#fff; text-align:center; padding:40px 20px; }
     #categorias { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:20px; }
     button { padding:10px 16px; border:none; border-radius:20px; background:#ff6f61; color:#fff; cursor:pointer; }
+    button.active { background:#e85a4f; }
     #produtos { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; padding:20px; max-width:1200px; margin:auto; }
     .card { background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 6px 16px rgba(0,0,0,.08); }
-    .card img { width:100%; height:220px; object-fit:cover; }
+    .card img { width:100%; height:220px; object-fit:cover; background:#f0f0f0; }
     .info { padding:15px; }
     .preco { color:#e85a4f; font-size:20px; font-weight:bold; margin:8px 0; }
+    .whatsapp-btn { display:inline-block; padding:10px 20px; background:#25D366; color:#fff; text-decoration:none; border-radius:20px; }
+    #erro { color:#e85a4f; text-align:center; padding:20px; display:none; }
   </style>
 </head>
 <body>
@@ -24,28 +27,54 @@
 
   <div id="categorias"></div>
   <div id="produtos"></div>
+  <div id="erro"></div>
 
   <script>
-    const DATA_URL = 'https://raw.githubusercontent.com/danieljacques86-code/RoseDoceseSalgados/refs/heads/main/produtos.json';
+    // URL corrigida (crie o repo ou use local para teste)
+    const DATA_URL = 'https://raw.githubusercontent.com/danieljacques86-code/RoseDoceseSalgados/main/produtos.txt';
 
     let dados = {
-      titulo: '',
-      subtitulo: '',
-      whatsapp: '',
+      titulo: 'Delícias da Rose',
+      subtitulo: 'Doces e Salgados Caseiros',
+      whatsapp: '5511999999999',  // Troque pelo real
       categorias: {}
     };
 
     let categoriaAtual = '';
 
-    async function carregarTXT() {
-      const resp = await fetch(DATA_URL, { cache: 'no-store' });
-      const txt = await resp.text();
-      interpretarTXT(txt);
+    // Dados de exemplo para teste imediato (comente se usar fetch)
+    const DADOS_EXEMPLO = `
+TITULO=Delícias da Rose
+SUBTITULO=Doces e Salgados Caseiros Feitos com Amor
+WHATSAPP=5511999999999
+
+[Doces]
+Brigadeiro Gourmet|15.00|Brigadeiro cremoso com granulado|https://via.placeholder.com/300x220/ff69b4/fff?text=Brigadeiro
+Bolo de Cenoura|35.00|Bolo fofinho com cobertura de chocolate|https://via.placeholder.com/300x220/ff1493/fff?text=Bolo+Cenoura
+Pudim de Leite|20.00|Pudim cremoso com caramelo|https://via.placeholder.com/300x220/ff69b4/fff?text=Pudim
+
+[Salgados]
+Coxinha de Frango|12.00|Coxinha crocante recheada com frango desfiado|https://via.placeholder.com/300x220/ffa500/fff?text=Coxinha
+Pastel de Carne|10.00|Pastel frito com carne moída temperada|https://via.placeholder.com/300x220/ff8c00/fff?text=Pastel
+Empada de Palmito|8.00|Empada leve e saborosa|https://via.placeholder.com/300x220/ffa500/fff?text=Empada
+    `.trim();
+
+    async function carregarDados() {
+      try {
+        const resp = await fetch(DATA_URL, { cache: 'no-store' });
+        if (!resp.ok) throw new Error('Arquivo não encontrado');
+        const txt = await resp.text();
+        interpretarTXT(txt);
+      } catch (error) {
+        console.warn('Erro no fetch, usando dados exemplo:', error);
+        interpretarTXT(DADOS_EXEMPLO);
+      }
       renderizarTudo();
     }
 
     function interpretarTXT(txt) {
-      const linhas = txt.split('\n').map(l => l.trim()).filter(Boolean);
+      const linhas = txt.split('
+').map(l => l.trim()).filter(Boolean);
       let categoria = '';
 
       for (const linha of linhas) {
@@ -57,11 +86,14 @@
           dados.whatsapp = linha.replace('WHATSAPP=', '').trim();
         } else if (linha.startsWith('[') && linha.endsWith(']')) {
           categoria = linha.slice(1, -1);
-          dados.categorias[categoria] = [];
+          if (!dados.categorias[categoria]) dados.categorias[categoria] = [];
           if (!categoriaAtual) categoriaAtual = categoria;
         } else if (categoria && linha.includes('|')) {
-          const [nome, preco, descricao, foto] = linha.split('|');
-          dados.categorias[categoria].push({ nome, preco, descricao, foto });
+          const partes = linha.split('|');
+          if (partes.length >= 3) {
+            const [nome, preco, descricao, foto = 'https://via.placeholder.com/300x220/ff69b4/fff?text=Produto'] = partes;
+            dados.categorias[categoria].push({ nome: nome.trim(), preco: preco.trim(), descricao: descricao.trim(), foto: foto.trim() });
+          }
         }
       }
     }
@@ -69,15 +101,26 @@
     function renderizarTudo() {
       document.getElementById('titulo').textContent = dados.titulo;
       document.getElementById('subtitulo').textContent = dados.subtitulo;
+      document.getElementById('erro').style.display = 'none';
 
       const catArea = document.getElementById('categorias');
       catArea.innerHTML = '';
 
-      Object.keys(dados.categorias).forEach(cat => {
+      const categorias = Object.keys(dados.categorias);
+      if (categorias.length === 0) {
+        document.getElementById('erro').textContent = 'Nenhuma categoria encontrada. Verifique o arquivo.';
+        document.getElementById('erro').style.display = 'block';
+        return;
+      }
+
+      categorias.forEach(cat => {
         const btn = document.createElement('button');
         btn.textContent = cat;
+        btn.className = categoriaAtual === cat ? 'active' : '';
         btn.onclick = () => {
           categoriaAtual = cat;
+          document.querySelectorAll('#categorias button').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
           renderizarProdutos();
         };
         catArea.appendChild(btn);
@@ -90,25 +133,31 @@
       const area = document.getElementById('produtos');
       area.innerHTML = '';
 
-      dados.categorias[categoriaAtual].forEach(prod => {
+      const produtos = dados.categorias[categoriaAtual] || [];
+      if (produtos.length === 0) {
+        area.innerHTML = '<p style="text-align:center; grid-column:1/-1;">Nenhum produto nesta categoria.</p>';
+        return;
+      }
+
+      produtos.forEach(prod => {
         const msg = encodeURIComponent(`Olá! Quero pedir ${prod.nome} - R$ ${prod.preco}`);
-        area.innerHTML += `
+        const card = `
           <div class="card">
-            <img src="${prod.foto}" alt="${prod.nome}">
+            <img src="${prod.foto}" alt="${prod.nome}" onerror="this.src='https://via.placeholder.com/300x220/ff69b4/fff?text=${encodeURIComponent(prod.nome)}'">
             <div class="info">
               <h3>${prod.nome}</h3>
               <p>${prod.descricao}</p>
               <div class="preco">R$ ${prod.preco}</div>
-              <a href="https://wa.me/${dados.whatsapp}?text=${msg}" target="_blank">Pedir no WhatsApp</a>
+              <a href="https://wa.me/${dados.whatsapp}?text=${msg}" target="_blank" class="whatsapp-btn">Pedir no WhatsApp</a>
             </div>
           </div>
         `;
+        area.innerHTML += card;
       });
     }
 
-    carregarTXT();
+    // Inicia o carregamento
+    carregarDados();
   </script>
 </body>
 </html>
-
-
