@@ -1,119 +1,122 @@
-se<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Delícias da Rose</title>
   <style>
-    body { font-family: Arial; background:#fff8f5; margin:0; }
-    header { background:#ff8f8f; color:#fff; text-align:center; padding:40px 20px; }
+    body { 
+      font-family: Arial; 
+      background: linear-gradient(rgba(255,248,245,.9), rgba(255,248,245,.9)), 
+                  url('https://images.unsplash.com/photo-1551028719-00167b16eac5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center/cover fixed; 
+      margin:0; 
+    }
+    header { 
+      background: linear-gradient(135deg, #ff8f8f, #ff6f61); 
+      color:#fff; 
+      text-align:center; 
+      padding:40px 20px; 
+      box-shadow: 0 4px 20px rgba(255,143,143,.3);
+    }
     #categorias { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:20px; }
-    button { padding:10px 16px; border:none; border-radius:20px; background:#ff6f61; color:#fff; cursor:pointer; }
-    button.active { background:#e85a4f; }
-    #produtos { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; padding:20px; max-width:1200px; margin:auto; }
-    .card { background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 6px 16px rgba(0,0,0,.08); }
-    .card img { width:100%; height:220px; object-fit:cover; background:#f0f0f0; }
-    .info { padding:15px; }
-    .preco { color:#e85a4f; font-size:20px; font-weight:bold; margin:8px 0; }
-    .whatsapp-btn { display:inline-block; padding:10px 20px; background:#25D366; color:#fff; text-decoration:none; border-radius:20px; }
-    #erro { color:#e85a4f; text-align:center; padding:20px; display:none; }
+    button { 
+      padding:12px 20px; 
+      border:none; 
+      border-radius:25px; 
+      background:#ff6f61; 
+      color:#fff; 
+      cursor:pointer; 
+      font-weight:bold;
+      transition: all .3s;
+    }
+    button:hover, button.active { 
+      background:#e85a4f; 
+      transform: scale(1.05);
+    }
+    #produtos { 
+      display:grid; 
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); 
+      gap:25px; 
+      padding:30px; 
+      max-width:1400px; 
+      margin:auto; 
+    }
+    .card { 
+      background: rgba(255,255,255,.95); 
+      border-radius:20px; 
+      overflow:hidden; 
+      box-shadow:0 10px 30px rgba(0,0,0,.15); 
+      transition: transform .3s;
+    }
+    .card:hover { transform: translateY(-10px); }
+    .card img { 
+      width:100%; 
+      height:250px; 
+      object-fit:cover; 
+    }
+    .info { 
+      padding:20px; 
+      text-align:center;
+    }
+    .preco { 
+      color:#e85a4f; 
+      font-size:24px; 
+      font-weight:bold; 
+      margin:15px 0; 
+    }
+    .whatsapp-btn { 
+      display:inline-block; 
+      padding:12px 25px; 
+      background:#25D366; 
+      color:#fff; 
+      text-decoration:none; 
+      border-radius:25px; 
+      font-weight:bold;
+      transition: background .3s;
+    }
+    .whatsapp-btn:hover { background:#128C7E; }
   </style>
 </head>
 <body>
   <header>
-    <h1 id="titulo">Carregando...</h1>
-    <p id="subtitulo"></p>
+    <h1>🍰 Delícias da Rose 🍟</h1>
+    <p>Doces e Salgados Caseiros • Feitos com Amor em São José do Rio Preto</p>
   </header>
 
   <div id="categorias"></div>
   <div id="produtos"></div>
-  <div id="erro"></div>
 
   <script>
-    // URL corrigida (crie o repo ou use local para teste)
-    const DATA_URL = 'https://raw.githubusercontent.com/danieljacques86-code/RoseDoceseSalgados/main/produtos.txt';
-
-    let dados = {
-      titulo: 'Delícias da Rose',
-      subtitulo: 'Doces e Salgados Caseiros',
-      whatsapp: '5511999999999',  // Troque pelo real
-      categorias: {}
+    const dados = {
+      whatsapp: '5517999999999',  // ← TROQUE PELO SEU NÚMERO
+      categorias: {
+        '🍰 Doces': [
+          { nome: 'Brigadeiro Gourmet', preco: 'R$ 15,00', descricao: 'Brigadeiro cremoso com granulado belga', foto: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=250&fit=crop' },
+          { nome: 'Bolo de Cenoura', preco: 'R$ 35,00', descricao: 'Bolo fofinho c/ cobertura de chocolate', foto: 'https://images.unsplash.com/photo-1562440499-64e7f7a33733?w=400&h=250&fit=crop' },
+          { nome: 'Pudim de Leite', preco: 'R$ 20,00', descricao: 'Pudim cremoso com caramelo caseiro', foto: 'https://images.unsplash.com/photo-1603482824006-f8b5f4e0ceae?w=400&h=250&fit=crop' },
+          { nome: 'Torta Holandesa', preco: 'R$ 45,00', descricao: 'Torta crocante de chocolate e caramelo', foto: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=250&fit=crop' }
+        ],
+        '🍟 Salgados': [
+          { nome: 'Coxinha de Frango', preco: 'R$ 12,00 / 5un', descricao: 'Coxinha crocante recheada c/ frango', foto: 'https://images.unsplash.com/photo-1621996346565-e3adc808ee9d?w=400&h=250&fit=crop' },
+          { nome: 'Pastel de Carne', preco: 'R$ 10,00 / 5un', descricao: 'Pastel frito c/ carne moída temperada', foto: 'https://images.unsplash.com/photo-1589924565761-6198d22b3f0f?w=400&h=250&fit=crop' },
+          { nome: 'Empada de Palmito', preco: 'R$ 8,00 / un', descricao: 'Empada leve e saborosa', foto: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=250&fit=crop' },
+          { nome: 'Risole de Queijo', preco: 'R$ 11,00 / 5un', descricao: 'Risole recheado c/ muçarela derretida', foto: 'https://images.unsplash.com/photo-1579586337278-3f436f89a1b4?w=400&h=250&fit=crop' }
+        ],
+        '❤️ Combo Família': [
+          { nome: 'Combo Salgado 20un', preco: 'R$ 85,00', descricao: 'Mix coxinhas + pastéis + empadas', foto: 'https://images.unsplash.com/photo-1562440499-64e7f7a33733?w=400&h=250&fit=crop' },
+          { nome: 'Combo Doce 12un', preco: 'R$ 65,00', descricao: 'Brigadeiros + brownies + cookies', foto: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=250&fit=crop' },
+          { nome: 'Festa Kids 30un', preco: 'R$ 140,00', descricao: 'Salgados + docinhos infantis', foto: 'https://images.unsplash.com/photo-1603482824006-f8b5f4e0ceae?w=400&h=250&fit=crop' }
+        ]
+      }
     };
 
-    let categoriaAtual = '';
-
-    // Dados de exemplo para teste imediato (comente se usar fetch)
-    const DADOS_EXEMPLO = `
-TITULO=Delícias da Rose
-SUBTITULO=Doces e Salgados Caseiros Feitos com Amor
-WHATSAPP=5511999999999
-
-[Doces]
-Brigadeiro Gourmet|15.00|Brigadeiro cremoso com granulado|https://via.placeholder.com/300x220/ff69b4/fff?text=Brigadeiro
-Bolo de Cenoura|35.00|Bolo fofinho com cobertura de chocolate|https://via.placeholder.com/300x220/ff1493/fff?text=Bolo+Cenoura
-Pudim de Leite|20.00|Pudim cremoso com caramelo|https://via.placeholder.com/300x220/ff69b4/fff?text=Pudim
-
-[Salgados 100 unidades]
-Coxinha de Frango|85.00|Coxinha crocante recheada com frango desfiado|https://via.placeholder.com/300x220/ffa500/fff?text=Coxinha
-Pastel de Carne|10.00|Pastel frito com carne moída temperada|https://via.placeholder.com/300x220/ff8c00/fff?text=Pastel
-Empada de Palmito|8.00|Empada leve e saborosa|https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmyUIdSler_xyk24F6lp7XOTitzLFu3PJorhzylzAMGg&s=10
-    `.trim();
-
-    async function carregarDados() {
-      try {
-        const resp = await fetch(DATA_URL, { cache: 'no-store' });
-        if (!resp.ok) throw new Error('Arquivo não encontrado');
-        const txt = await resp.text();
-        interpretarTXT(txt);
-      } catch (error) {
-        console.warn('Erro no fetch, usando dados exemplo:', error);
-        interpretarTXT(DADOS_EXEMPLO);
-      }
-      renderizarTudo();
-    }
-
-    function interpretarTXT(txt) {
-      const linhas = txt.split('
-').map(l => l.trim()).filter(Boolean);
-      let categoria = '';
-
-      for (const linha of linhas) {
-        if (linha.startsWith('TITULO=')) {
-          dados.titulo = linha.replace('TITULO=', '').trim();
-        } else if (linha.startsWith('SUBTITULO=')) {
-          dados.subtitulo = linha.replace('SUBTITULO=', '').trim();
-        } else if (linha.startsWith('WHATSAPP=')) {
-          dados.whatsapp = linha.replace('WHATSAPP=', '').trim();
-        } else if (linha.startsWith('[') && linha.endsWith(']')) {
-          categoria = linha.slice(1, -1);
-          if (!dados.categorias[categoria]) dados.categorias[categoria] = [];
-          if (!categoriaAtual) categoriaAtual = categoria;
-        } else if (categoria && linha.includes('|')) {
-          const partes = linha.split('|');
-          if (partes.length >= 3) {
-            const [nome, preco, descricao, foto = 'https://via.placeholder.com/300x220/ff69b4/fff?text=Produto'] = partes;
-            dados.categorias[categoria].push({ nome: nome.trim(), preco: preco.trim(), descricao: descricao.trim(), foto: foto.trim() });
-          }
-        }
-      }
-    }
+    let categoriaAtual = Object.keys(dados.categorias)[0];
 
     function renderizarTudo() {
-      document.getElementById('titulo').textContent = dados.titulo;
-      document.getElementById('subtitulo').textContent = dados.subtitulo;
-      document.getElementById('erro').style.display = 'none';
-
       const catArea = document.getElementById('categorias');
       catArea.innerHTML = '';
 
-      const categorias = Object.keys(dados.categorias);
-      if (categorias.length === 0) {
-        document.getElementById('erro').textContent = 'Nenhuma categoria encontrada. Verifique o arquivo.';
-        document.getElementById('erro').style.display = 'block';
-        return;
-      }
-
-      categorias.forEach(cat => {
+      Object.keys(dados.categorias).forEach(cat => {
         const btn = document.createElement('button');
         btn.textContent = cat;
         btn.className = categoriaAtual === cat ? 'active' : '';
@@ -133,22 +136,18 @@ Empada de Palmito|8.00|Empada leve e saborosa|https://encrypted-tbn0.gstatic.com
       const area = document.getElementById('produtos');
       area.innerHTML = '';
 
-      const produtos = dados.categorias[categoriaAtual] || [];
-      if (produtos.length === 0) {
-        area.innerHTML = '<p style="text-align:center; grid-column:1/-1;">Nenhum produto nesta categoria.</p>';
-        return;
-      }
-
+      const produtos = dados.categorias[categoriaAtual];
+      
       produtos.forEach(prod => {
-        const msg = encodeURIComponent(`Olá! Quero pedir ${prod.nome} - R$ ${prod.preco}`);
+        const msg = encodeURIComponent(`Olá Rose! Quero pedir: ${prod.nome} - ${prod.preco}`);
         const card = `
           <div class="card">
-            <img src="${prod.foto}" alt="${prod.nome}" onerror="this.src='https://via.placeholder.com/300x220/ff69b4/fff?text=${encodeURIComponent(prod.nome)}'">
+            <img src="${prod.foto}" alt="${prod.nome}" onerror="this.src='https://via.placeholder.com/400x250/ff69b4/fff?text=${encodeURIComponent(prod.nome)}'">
             <div class="info">
               <h3>${prod.nome}</h3>
               <p>${prod.descricao}</p>
-              <div class="preco">R$ ${prod.preco}</div>
-              <a href="https://wa.me/${dados.whatsapp}?text=${msg}" target="_blank" class="whatsapp-btn">Pedir no WhatsApp</a>
+              <div class="preco">${prod.preco}</div>
+              <a href="https://wa.me/${dados.whatsapp}?text=${msg}" target="_blank" class="whatsapp-btn">🍏 Pedir no WhatsApp</a>
             </div>
           </div>
         `;
@@ -156,8 +155,8 @@ Empada de Palmito|8.00|Empada leve e saborosa|https://encrypted-tbn0.gstatic.com
       });
     }
 
-    // Inicia o carregamento
-    carregarDados();
+    // Carrega imediatamente
+    renderizarTudo();
   </script>
 </body>
 </html>
